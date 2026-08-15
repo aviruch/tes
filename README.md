@@ -209,353 +209,367 @@ For the current case:
 **Inlet temperature:** 12 °C  
 
 
-## Example Hand Calculation — First 2 Minutes
+## Example Calculation — First 120 Sec
 
 Consider a 150 m³ water storage tank divided into 10 equal-volume layers.
 
 ### 1. Tank and Layer Properties
 
-Total tank volume:
+The total tank volume is:
 
-\[
+$$
 V_{tank}=150\;m^3
-\]
+$$
 
-Number of layers:
+The tank is divided into 10 layers:
 
-\[
+$$
 N=10
-\]
+$$
 
 Therefore, the volume of each layer is:
 
-\[
-V_{layer}=\frac{V_{tank}}{N}
-=\frac{150}{10}
-=15\;m^3
-\]
+$$
+V_{layer}
+=
+\frac{V_{tank}}{N}
+=
+\frac{150}{10}
+=
+15\;m^3
+$$
 
 Assuming a water density of:
 
-\[
+$$
 \rho=1000\;kg/m^3
-\]
+$$
 
 the mass of water in each layer is:
 
-\[
-m_{layer}=\rho V_{layer}
-\]
+$$
+m_{layer}
+=
+\rho V_{layer}
+$$
 
-\[
-m_{layer}=1000\times15
-\]
+$$
+m_{layer}
+=
+1000\times15
+=
+15,000\;kg
+$$
 
-\[
-\boxed{m_{layer}=15,000\;kg}
-\]
-
-Therefore, each of the 10 layers contains approximately **15,000 kg of water**.
+Therefore, each layer contains approximately **15,000 kg of water**.
 
 ---
 
-### 2. Initial Conditions
+### 2. Initial and Boundary Conditions
 
 Initially, the entire tank is at:
 
-\[
+$$
 T_{initial}=6^\circ C
-\]
+$$
 
-Therefore, for the first layer:
+Therefore, the initial temperature of the top layer is:
 
-\[
+$$
 T_1^0=6^\circ C
-\]
+$$
 
 Water enters the tank from the top at:
 
-\[
+$$
 T_{in}=12^\circ C
-\]
+$$
 
 The mass flow rate is:
 
-\[
+$$
 \dot{m}=20\;kg/s
-\]
+$$
 
-We want to calculate the temperature after:
+We calculate the temperature after 2 minutes:
 
-\[
-\Delta t=2\;minutes=120\;s
-\]
+$$
+\Delta t=2\times60=120\;s
+$$
 
 ---
 
-### 3. Water Entering During the 2-Minute Time Step
+### 3. Water Flow During the 2-Minute Time Step
 
-The mass of water entering during the 120-second time step is:
+The mass of water entering during the time step is:
 
-\[
+$$
 m_{in}=\dot{m}\Delta t
-\]
+$$
 
-\[
-m_{in}=20\times120
-\]
+Using:
 
-\[
+$$
+\begin{aligned}
+m_{in}
+&=
+20\times120 \\
+&=
+2,400\;kg
+\end{aligned}
+$$
+
+Therefore:
+
+$$
 \boxed{m_{in}=2,400\;kg}
-\]
+$$
 
-Because the tank has a constant volume, the same 2,400 kg of water leaves Layer 1 and moves into Layer 2 during this time step.
+Because the tank has a constant volume, the same mass of water moves out of Layer 1 into Layer 2.
 
 Therefore, the mass of Layer 1 remains:
 
-\[
+$$
 m_1=15,000\;kg
-\]
+$$
 
 ---
 
 ### 4. Energy Balance for Layer 1
 
-Layer 1 receives 12 °C water and sends water to Layer 2.
+The top layer receives water at $T_{in}$ and transfers the same mass flow rate to Layer 2.
 
 The energy balance is:
 
-\[
+$$
 m_1c_p\frac{dT_1}{dt}
 =
 \dot{m}c_p(T_{in}-T_1)
-\]
+$$
 
-Since the specific heat \(c_p\) appears on both sides, it cancels:
+Since $c_p$ appears on both sides, it cancels:
 
-\[
+$$
 m_1\frac{dT_1}{dt}
 =
 \dot{m}(T_{in}-T_1)
-\]
+$$
 
-For a time-step calculation:
+Therefore:
 
-\[
+$$
+\frac{dT_1}{dt}
+=
+\frac{\dot{m}}{m_1}
+(T_{in}-T_1)
+$$
+
+---
+
+### 5. Discrete Time-Step Equation
+
+Using a time step $\Delta t$, the temperature of Layer 1 at the next time step is:
+
+$$
 T_1^{n+1}
 =
 T_1^n+
 \frac{\dot{m}\Delta t}{m_1}
-(T_{in}-T_1^n)
-\]
+\left(T_{in}-T_1^n\right)
+$$
 
----
+For the first time step:
 
-### 5. Calculate Temperature of Layer 1 After 2 Minutes
-
-Known values:
-
-\[
+$$
 T_1^n=6^\circ C
-\]
+$$
 
-\[
+$$
 T_{in}=12^\circ C
-\]
+$$
 
-\[
+$$
 \dot{m}=20\;kg/s
-\]
+$$
 
-\[
+$$
 \Delta t=120\;s
-\]
+$$
 
-\[
+$$
 m_1=15,000\;kg
-\]
+$$
 
-Substituting:
+Substituting these values:
 
-\[
+$$
+\begin{aligned}
 T_1^{n+1}
-=
+&=
 6+
-\frac{20\times120}{15,000}(12-6)
-\]
+\frac{20\times120}{15,000}(12-6) \\[6pt]
+&=
+6+
+\frac{2,400}{15,000}(6) \\[6pt]
+&=
+6+0.16(6) \\[6pt]
+&=
+6+0.96 \\[6pt]
+&=
+\boxed{6.96^\circ C}
+\end{aligned}
+$$
 
-First calculate the mass-flow fraction:
-
-\[
-\frac{20\times120}{15,000}
-=
-\frac{2,400}{15,000}
-=
-0.16
-\]
-
-Therefore:
-
-\[
-T_1^{n+1}
-=
-6+0.16(12-6)
-\]
-
-\[
-T_1^{n+1}
-=
-6+0.16(6)
-\]
-
-\[
-T_1^{n+1}=6+0.96
-\]
-
-Therefore:
-
-\[
-\boxed{T_1^{2min}=6.96^\circ C}
-\]
-
-So, after two minutes, the temperature of the top layer increases from **6.00 °C to approximately 6.96 °C**.
+Therefore, the temperature of the top layer after **2 minutes is 6.96 °C**.
 
 ---
 
-### 6. Calculation for Layer 2
+### 6. Energy Balance for Layer 2
 
-Initially:
+Layer 2 receives water from Layer 1.
 
-\[
-T_2^0=6^\circ C
-\]
+The energy balance is:
 
-Layer 2 receives water from Layer 1. At the end of the first time step:
-
-\[
-T_1=6.96^\circ C
-\]
-
-The energy balance for Layer 2 is:
-
-\[
+$$
 m_2c_p\frac{dT_2}{dt}
 =
 \dot{m}c_p(T_1-T_2)
-\]
+$$
 
-Therefore:
+Again, $c_p$ cancels:
 
-\[
+$$
+\frac{dT_2}{dt}
+=
+\frac{\dot{m}}{m_2}
+(T_1-T_2)
+$$
+
+The discrete equation is:
+
+$$
 T_2^{n+1}
 =
 T_2^n+
 \frac{\dot{m}\Delta t}{m_2}
-(T_1^n-T_2^n)
-\]
+\left(T_1^n-T_2^n\right)
+$$
 
-Substituting:
+Initially:
 
-\[
+$$
+T_2^n=6^\circ C
+$$
+
+and:
+
+$$
+T_1^n=6^\circ C
+$$
+
+Therefore, during the **first 2-minute time step**:
+
+$$
+\begin{aligned}
 T_2^{n+1}
-=
+&=
 6+
-\frac{20\times120}{15,000}(6.96-6)
-\]
+\frac{20\times120}{15,000}(6-6) \\[6pt]
+&=
+6+0 \\[6pt]
+&=
+\boxed{6.00^\circ C}
+\end{aligned}
+$$
 
-\[
-=
-6+0.16(0.96)
-\]
+This is an important point: in an explicit time-stepping scheme, **Layer 2 uses the Layer 1 temperature from the beginning of the time step**, not the newly calculated 6.96 °C.
 
-\[
-=
-6+0.1536
-\]
+Therefore, after the first 2-minute time step:
 
-Therefore:
-
-\[
-\boxed{T_2^{2min}=6.154^\circ C}
-\]
-
----
-
-### 7. Temperature Distribution After 2 Minutes
-
-Using the same approach for all 10 layers gives the temperature distribution after each time step.
-
-After the first 2-minute time step:
-
-| Layer | Initial Temperature (°C) | Temperature after 2 min (°C) |
-|---|---:|---:|
-| 1 — Top | 6.000 | 6.960 |
-| 2 | 6.000 | 6.154 |
-| 3 | 6.000 | 6.025 |
-| 4 | 6.000 | 6.004 |
-| 5 | 6.000 | 6.001 |
-| 6 | 6.000 | 6.000 |
-| 7 | 6.000 | 6.000 |
-| 8 | 6.000 | 6.000 |
-| 9 | 6.000 | 6.000 |
-| 10 — Bottom | 6.000 | 6.000 |
-
-The warmer water therefore propagates gradually downward through the tank.
+| Layer | Temperature |
+|---|---:|
+| Layer 1 — Top | 6.960 °C |
+| Layer 2 | 6.000 °C |
+| Layer 3 | 6.000 °C |
+| Layer 4 | 6.000 °C |
+| Layer 5 | 6.000 °C |
+| Layer 6 | 6.000 °C |
+| Layer 7 | 6.000 °C |
+| Layer 8 | 6.000 °C |
+| Layer 9 | 6.000 °C |
+| Layer 10 — Bottom | 6.000 °C |
 
 ---
 
-## 8. General Equation Used by the Model
+### 7. General Equation for the 10-Layer Model
 
-For the **top layer**:
+For the top layer:
 
-\[
+$$
 \boxed{
 T_1^{n+1}
 =
 T_1^n+
 \frac{\dot{m}\Delta t}{m_1}
-(T_{in}-T_1^n)
+\left(T_{in}-T_1^n\right)
 }
-\]
+$$
 
 For all other layers:
 
-\[
+$$
 \boxed{
 T_i^{n+1}
 =
 T_i^n+
 \frac{\dot{m}\Delta t}{m_i}
-(T_{i-1}^n-T_i^n)
+\left(T_{i-1}^n-T_i^n\right)
 }
-\]
+$$
 
 where:
 
-- \(T_i^n\) = temperature of layer \(i\) at the previous time step
-- \(T_i^{n+1}\) = temperature of layer \(i\) at the new time step
-- \(\dot{m}\) = mass flow rate [kg/s]
-- \(\Delta t\) = time step [s]
-- \(m_i\) = water mass in layer \(i\) [kg]
-- \(T_{in}\) = inlet water temperature [°C]
+- $T_i^n$ = temperature of layer $i$ at the previous time step
+- $T_i^{n+1}$ = temperature of layer $i$ at the new time step
+- $\dot{m}$ = water mass flow rate [kg/s]
+- $\Delta t$ = time step [s]
+- $m_i$ = mass of water in layer $i$ [kg]
+- $T_{in}$ = inlet water temperature [°C]
 
-For the bottom layer (Layer 10), the calculated temperature is also the **tank outlet temperature**.
+For the bottom layer:
+
+$$
+T_{out}=T_{10}
+$$
+
+Therefore, the temperature of Layer 10 represents the **tank outlet temperature**.
 
 ---
 
-## 9. Important Note
+### 8. Important Numerical Point
 
-This hand calculation represents a simplified stratified-tank model in which each layer is assumed to be perfectly mixed within itself and water flows sequentially from the top layer to the bottom layer.
+The calculation above uses an **explicit time-stepping approach**.
 
-The model does not currently include:
+At each time step:
 
-- Heat loss through the tank wall
-- Thermal conduction between adjacent layers
-- Temperature-inversion mixing
-- Inlet diffuser effects
-- Non-uniform layer volumes
-- Variable water properties
+1. Temperatures from the previous time step are used.
+2. The new temperature of Layer 1 is calculated.
+3. The new temperature of Layer 2 is calculated using the **old** temperature of Layer 1.
+4. The same procedure is repeated down to Layer 10.
+5. All calculated temperatures become the starting temperatures for the next time step.
 
-These effects can be added later if a more detailed representation of the actual TES tank is required.
+This can be represented as:
+
+$$
+\left[
+T_1^n,T_2^n,\ldots,T_{10}^n
+\right]
+\longrightarrow
+\left[
+T_1^{n+1},T_2^{n+1},\ldots,T_{10}^{n+1}
+\right]
+$$
+
+The process is then repeated for every time step until the desired simulation period is reached.
 
 The model can subsequently be expanded to represent the actual operating conditions of a thermal energy storage (TES) system more closely.
